@@ -1,0 +1,418 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>CAPY — Sunglasses Mode (Demo)</title>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" />
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<style>
+  html{scroll-behavior:smooth}
+  :root{
+    --ink:#0b0d13; --bg1:#0b0d13; --bg2:#12162a; --bg3:#1a1f3b;
+    --neon1:#00f0ff; --neon2:#ff26a8; --neon3:#9dff57; --glass:rgba(255,255,255,.06);
+    --frames:#e21f31; /* RED sunglasses frames */
+  }
+  body{
+    color:#ecf2ff;
+    background:
+      radial-gradient(1200px 800px at -10% -10%, #1f2450 0, transparent 60%),
+      radial-gradient(1000px 700px at 110% 10%, #211a46 0, transparent 60%),
+      linear-gradient(180deg, var(--bg1), var(--bg2) 35%, var(--bg3));
+    min-height:100dvh;
+  }
+  .streaks:before{
+    content:""; position:fixed; inset:0; pointer-events:none; z-index:-2; opacity:.18;
+    background:repeating-linear-gradient(to right, rgba(255,255,255,.08) 0 1px, transparent 1px 8px);
+    animation:slide 18s linear infinite;
+  }
+  @keyframes slide{ to{ transform:translateX(-160px);} }
+  .grain{position:fixed; inset:0; z-index:-1; pointer-events:none; opacity:.14; mix-blend-mode:soft-light;
+    background-image:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="160" height="160" viewBox="0 0 160 160"><filter id="n"><feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2"/></filter><rect width="100%" height="100%" filter="url(%23n)" opacity="0.35"/></svg>');
+  }
+  .row{max-width:74rem; margin-inline:auto; padding-inline:1rem}
+  .glass{background:var(--glass); border:1px solid rgba(255,255,255,.12); border-radius:1rem; backdrop-filter:blur(10px)}
+  .btn{display:inline-flex; align-items:center; gap:.6rem; padding:.9rem 1.25rem; border-radius:999px; font-weight:800}
+  .btn-cta{background:linear-gradient(90deg,var(--neon1),var(--neon2)); color:#061015; box-shadow:0 6px 20px rgba(0,240,255,.35)}
+  .btn-ghost{border:2px solid #c3ceff; color:#c3ceff}
+  .chip{background:linear-gradient(90deg,var(--neon3),var(--neon1)); color:#071015; border-radius:999px; padding:.42rem .9rem; font-weight:900}
+  .reveal{opacity:0; transform:translateY(14px); transition:opacity .6s ease, transform .6s ease}
+  .reveal.visible{opacity:1; transform:none}
+  .title-glow{text-shadow:0 0 10px rgba(0,240,255,.4), 0 0 18px rgba(255,38,168,.25)}
+  .frame{position:relative; border:1px solid rgba(255,255,255,.12); border-radius:1.25rem; overflow:hidden}
+  .frame:before{content:""; position:absolute; inset:0; background:radial-gradient(800px 200px at 50% 0%, rgba(0,240,255,.18), transparent 60%); pointer-events:none}
+  .progress{position:fixed; left:0; top:0; height:3px; width:0; z-index:50;
+    background:linear-gradient(90deg,var(--neon1),var(--neon2),var(--neon3)); box-shadow:0 0 10px rgba(0,240,255,.5)}
+</style>
+</head>
+<body class="streaks">
+<div class="grain" aria-hidden="true"></div>
+<div id="progress" class="progress" aria-hidden="true"></div>
+
+<!-- NAV -->
+<header class="sticky top-0 z-40 border-b border-white/10 bg-[#0b0d13cc] backdrop-blur-xl">
+  <div class="row h-16 flex items-center justify-between">
+    <div class="flex items-center gap-3"><span class="chip">CAPY</span></div>
+    <nav class="hidden md:flex items-center gap-6 text-sm font-semibold opacity-90">
+      <a href="#about" class="hover:opacity-80">About</a>
+      <a href="#features" class="hover:opacity-80">Features</a>
+      <a href="#how" class="hover:opacity-80">How To Buy</a>
+      <a href="#tokenomics" class="hover:opacity-80">Tokenomics</a>
+      <a href="#community" class="hover:opacity-80">Community</a>
+      <a href="#roadmap" class="hover:opacity-80">Roadmap</a>
+      <a href="#faq" class="hover:opacity-80">FAQ</a>
+    </nav>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="row pt-10 pb-12 grid lg:grid-cols-2 gap-10 items-center">
+  <div class="reveal space-y-5">
+    <h1 class="text-[44px] sm:text-6xl font-black leading-[1.05] title-glow">CAPY — Sunglasses Mode</h1>
+    <p class="text-lg opacity-90 max-w-xl">Underground chill. Overground meme. Clean build, funny spirit. This is a demo — no token here.</p>
+    <div class="flex flex-wrap gap-3">
+      <a href="#about" class="btn btn-cta">Meet the Capy</a>
+      <a href="#community" class="btn btn-ghost">See the Habitats</a>
+    </div>
+    <div class="text-xs opacity-60">Hand-coded HTML/CSS/JS · Mobile-first · For vibes only.</div>
+  </div>
+
+  <!-- HERO CAPY with RED SUNGLASSES -->
+  <div class="reveal frame">
+    <div class="aspect-[4/3] bg-gradient-to-b from-[#0f1430] to-[#0a0f22] flex items-center justify-center">
+      <svg viewBox="0 0 640 480" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-label="Capybara mascot with sunglasses">
+        <defs>
+          <linearGradient id="fur" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#d3a679"/><stop offset="1" stop-color="#9a6a44"/>
+          </linearGradient>
+          <radialGradient id="snout" cx="50%" cy="50%" r="60%">
+            <stop offset="0" stop-color="#f0d2b8"/><stop offset="1" stop-color="#caa285"/>
+          </radialGradient>
+          <linearGradient id="tube" x1="0" y1="0" x2="1" y2="0">
+            <stop offset="0" stop-color="#00f0ff"/><stop offset="1" stop-color="#ff26a8"/>
+          </linearGradient>
+        </defs>
+        <!-- pool-ish boards for the vibe -->
+        <g opacity=".15">
+          <rect x="0" y="50" width="640" height="8" fill="url(#tube)"/>
+          <rect x="0" y="90" width="640" height="8" fill="url(#tube)"/>
+          <rect x="0" y="130" width="640" height="8" fill="url(#tube)"/>
+        </g>
+        <!-- capy (reclined) -->
+        <g transform="translate(40,80) rotate(-6,320,200)">
+          <ellipse cx="300" cy="240" rx="230" ry="130" fill="url(#fur)" stroke="#6f4b31" stroke-width="6"/>
+          <ellipse cx="460" cy="220" rx="86" ry="68" fill="url(#fur)" stroke="#6f4b31" stroke-width="6"/>
+          <!-- sunglasses (red frames + dark lenses) -->
+          <g transform="translate(410,190) rotate(-8)">
+            <path d="M0 0 h52 a6 6 0 0 1 6 6 v18 a6 6 0 0 1 -6 6 h-52 a6 6 0 0 1 -6 -6 v-18 a6 6 0 0 1 6 -6z"
+                  fill="#0b0d13" opacity=".95" />
+            <rect x="-10" y="8" width="10" height="6" rx="3" fill="var(--frames)"/>
+            <rect x="-58" y="-2" width="64" height="4" rx="2" fill="var(--frames)"/>
+            <rect x="52" y="-2" width="64" height="4" rx="2" fill="var(--frames)"/>
+            <rect x="-58" y="-10" width="174" height="12" rx="6" fill="var(--frames)"/>
+            <path d="M-58 -4 h64 v28 h-64 q-6 0 -6 -6 v-16 q0 -6 6 -6z" fill="#0b0d13" opacity=".95"/>
+          </g>
+          <!-- shiny highlight on lenses -->
+          <g opacity=".35" fill="#ffffff">
+            <ellipse cx="412" cy="200" rx="12" ry="6"/><ellipse cx="484" cy="200" rx="10" ry="5"/>
+          </g>
+          <!-- snout + smile -->
+          <ellipse cx="432" cy="250" rx="42" ry="30" fill="url(#snout)" stroke="#6f4b31" stroke-width="4"/>
+          <circle cx="444" cy="246" r="4" fill="#2c1a12"/>
+          <path d="M448 262 q-16 10 -32 10" stroke="#2c1a12" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <!-- paws -->
+          <g fill="#7b5235" stroke="#472d1d" stroke-width="5">
+            <ellipse cx="220" cy="320" rx="36" ry="18"/><ellipse cx="300" cy="330" rx="40" ry="20"/><ellipse cx="370" cy="328" rx="38" ry="19"/>
+          </g>
+        </g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section id="about" class="row pb-10">
+  <div class="glass p-6 md:p-8 reveal">
+    <h2 class="text-2xl font-bold mb-2">About CAPY</h2>
+    <p class="opacity-90">CAPY rides the midnight train to Meme Town — now with signature **red sunnies**. Calm face. Loud colors.</p>
+    <ul class="grid sm:grid-cols-3 gap-3 mt-4 text-sm">
+      <li class="glass p-4">🧪 <b>Hand-Made</b><br><span class="opacity-75">HTML/CSS/JS only — no templates.</span></li>
+      <li class="glass p-4">📱 <b>Mobile-First</b><br><span class="opacity-75">Thumb-friendly layout & buttons.</span></li>
+      <li class="glass p-4">🎭 <b>Honest Demo</b><br><span class="opacity-75">No token. Add your own later.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section id="features" class="row pb-8">
+  <h2 class="text-2xl font-bold mb-4 reveal">Features</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    <div class="glass p-5 reveal"><div class="font-semibold">Neon Subway Vibes</div><p class="text-sm opacity-80 mt-1">Streaks, glow, and glass UI.</p></div>
+    <div class="glass p-5 reveal"><div class="font-semibold">Sunglasses Capy</div><p class="text-sm opacity-80 mt-1">Red frames across the site.</p></div>
+    <div class="glass p-5 reveal"><div class="font-semibold">Clean Build</div><p class="text-sm opacity-80 mt-1">Tailwind CDN + tiny JS.</p></div>
+    <div class="glass p-5 reveal"><div class="font-semibold">Accessible</div><p class="text-sm opacity-80 mt-1">Contrast & reduced-motion respect.</p></div>
+    <div class="glass p-5 reveal"><div class="font-semibold">Extensible</div><p class="text-sm opacity-80 mt-1">Swap in your real images/links.</p></div>
+    <div class="glass p-5 reveal"><div class="font-semibold">Serious Fun</div><p class="text-sm opacity-80 mt-1">Memes but make it tidy.</p></div>
+  </div>
+</section>
+
+<!-- HOW TO BUY (template; no token here) -->
+<section id="how" class="row pb-12">
+  <h2 class="text-2xl font-bold mb-4 reveal">How To Buy (If You Launch One)</h2>
+  <div class="grid md:grid-cols-3 gap-4">
+    <div class="glass p-5 reveal"><div class="text-lg font-semibold">1) Create wallet</div><p class="text-sm opacity-80 mt-1">Install a trusted wallet.</p></div>
+    <div class="glass p-5 reveal"><div class="text-lg font-semibold">2) Fund it</div><p class="text-sm opacity-80 mt-1">Acquire the chain’s gas token.</p></div>
+    <div class="glass p-5 reveal"><div class="text-lg font-semibold">3) Swap safely</div><p class="text-sm opacity-80 mt-1">Use reputable DEX links only.</p></div>
+  </div>
+  <p class="text-xs opacity-60 mt-2">Demo guidance — verify everything if you ever launch.</p>
+</section>
+
+<!-- TOKENOMICS (DEMO) -->
+<section id="tokenomics" class="row pb-16 grid lg:grid-cols-2 gap-8 items-start">
+  <div class="reveal">
+    <h2 class="text-2xl font-bold">Tokenomics (Demo)</h2>
+    <p class="text-sm opacity-80 mt-2">Purely for layout. Replace with real, verified numbers.</p>
+    <ul class="mt-4 space-y-2 text-sm">
+      <li><span class="inline-block w-2.5 h-2.5 rounded-sm mr-2" style="background:#00f0ff"></span> Community — 40%</li>
+      <li><span class="inline-block w-2.5 h-2.5 rounded-sm mr-2" style="background:#ff26a8"></span> Platform Fees — 20%</li>
+      <li><span class="inline-block w-2.5 h-2.5 rounded-sm mr-2" style="background:#9dff57"></span> Liquidity — 20%</li>
+      <li><span class="inline-block w-2.5 h-2.5 rounded-sm mr-2" style="background:#7c9bff"></span> Rewards — 10%</li>
+      <li><span class="inline-block w-2.5 h-2.5 rounded-sm mr-2" style="background:#ffd166"></span> Art & Outreach — 10%</li>
+    </ul>
+  </div>
+  <div class="reveal glass p-4">
+    <canvas id="donut" height="320"></canvas>
+    <p class="text-xs opacity-60 mt-2">Visualization only.</p>
+  </div>
+</section>
+
+<!-- COMMUNITY (four habitats, ALL with red sunglasses) -->
+<section id="community" class="row pb-12">
+  <h2 class="text-2xl font-bold mb-4 reveal">Community Habitat — Sunglasses Edition 😎</h2>
+  <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+    <!-- A functionally identical pair of red sunglasses reused in each SVG -->
+    <!-- 1. Riverbank -->
+    <figure class="glass p-2 reveal">
+      <div class="rounded-lg overflow-hidden w-full h-44">
+        <svg viewBox="0 0 800 600" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-label="Capybara by a riverbank wearing sunglasses">
+          <defs>
+            <linearGradient id="sky1" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#9fd6ff"/><stop offset="1" stop-color="#cfeaff"/>
+            </linearGradient>
+            <linearGradient id="water1" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#5ec9ff"/><stop offset="1" stop-color="#49a8e8"/>
+            </linearGradient>
+            <linearGradient id="fur1" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#c99a6b"/><stop offset="1" stop-color="#946741"/>
+            </linearGradient>
+          </defs>
+          <rect width="800" height="600" fill="url(#sky1)"/>
+          <rect y="360" width="800" height="140" fill="url(#water1)" opacity=".9"/>
+          <ellipse cx="680" cy="520" rx="220" ry="60" fill="#5ec9ff" opacity=".25"/>
+          <path d="M0 420 C 180 380, 320 430, 520 420 C 700 410, 760 450, 800 440 L 800 600 L 0 600 Z" fill="#6bbf6b"/>
+          <g transform="translate(190,330)">
+            <ellipse cx="200" cy="90" rx="180" ry="100" fill="url(#fur1)" stroke="#6d4b2f" stroke-width="6"/>
+            <ellipse cx="340" cy="85" rx="60" ry="48" fill="url(#fur1)" stroke="#6d4b2f" stroke-width="6"/>
+            <!-- SUNGLASSES -->
+            <g transform="translate(306,68)">
+              <rect x="-54" y="-16" width="56" height="28" rx="6" fill="#0b0d13"/>
+              <rect x="6" y="-16" width="56" height="28" rx="6" fill="#0b0d13"/>
+              <rect x="-60" y="-20" width="130" height="10" rx="5" fill="var(--frames)"/>
+              <rect x="-66" y="-8" width="12" height="6" rx="3" fill="var(--frames)"/>
+              <rect x="62" y="-8" width="12" height="6" rx="3" fill="var(--frames)"/>
+            </g>
+            <ellipse cx="332" cy="110" rx="26" ry="18" fill="#e7c7a7" stroke="#6d4b2f" stroke-width="4"/>
+            <path d="M344 122 q-10 8 -24 8" stroke="#3a2416" stroke-width="5" fill="none" stroke-linecap="round"/>
+            <g fill="#7a5437" stroke="#3f2a1c" stroke-width="5">
+              <ellipse cx="160" cy="180" rx="34" ry="16"/>
+              <ellipse cx="230" cy="188" rx="36" ry="18"/>
+              <ellipse cx="300" cy="186" rx="36" ry="18"/>
+            </g>
+          </g>
+          <g stroke="#3e8c3e" stroke-width="6" stroke-linecap="round">
+            <path d="M80 520 q20 -60 8 -140"/><path d="M120 540 q18 -70 6 -140"/><path d="M720 540 q-20 -70 -8 -140"/>
+          </g>
+        </svg>
+      </div>
+      <figcaption class="text-xs opacity-80 mt-2">Riverbank — sunglasses, zero thoughts.</figcaption>
+    </figure>
+
+    <!-- 2. Wetlands -->
+    <figure class="glass p-2 reveal">
+      <div class="rounded-lg overflow-hidden w-full h-44">
+        <svg viewBox="0 0 800 600" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-label="Capybara in wetlands wearing sunglasses">
+          <defs>
+            <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#bfe8ff"/><stop offset="1" stop-color="#e9f7ff"/>
+            </linearGradient>
+            <linearGradient id="water2" x1="0" y1="0" x2="1" y2="0">
+              <stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#5aaeea"/>
+            </linearGradient>
+            <linearGradient id="fur2" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d2a478"/><stop offset="1" stop-color="#9e6f49"/>
+            </linearGradient>
+          </defs>
+          <rect width="800" height="600" fill="url(#sky2)"/>
+          <rect y="360" width="800" height="140" fill="url(#water2)"/>
+          <g fill="#86d27d" opacity=".9">
+            <ellipse cx="160" cy="460" rx="70" ry="22"/><ellipse cx="300" cy="490" rx="90" ry="26"/><ellipse cx="520" cy="470" rx="80" ry="24"/><ellipse cx="680" cy="500" rx="70" ry="22"/>
+          </g>
+          <g transform="translate(280,360)">
+            <ellipse cx="200" cy="70" rx="180" ry="90" fill="url(#fur2)" stroke="#725034" stroke-width="6"/>
+            <ellipse cx="340" cy="66" rx="58" ry="44" fill="url(#fur2)" stroke="#725034" stroke-width="6"/>
+            <!-- SUNGLASSES -->
+            <g transform="translate(306,52)">
+              <rect x="-52" y="-14" width="54" height="26" rx="6" fill="#0b0d13"/>
+              <rect x="6" y="-14" width="54" height="26" rx="6" fill="#0b0d13"/>
+              <rect x="-58" y="-18" width="126" height="10" rx="5" fill="var(--frames)"/>
+              <rect x="-64" y="-6" width="12" height="6" rx="3" fill="var(--frames)"/>
+              <rect x="58" y="-6" width="12" height="6" rx="3" fill="var(--frames)"/>
+            </g>
+            <ellipse cx="332" cy="88" rx="24" ry="16" fill="#e7c7a7" stroke="#725034" stroke-width="4"/>
+          </g>
+          <g stroke="#3b8a3b" stroke-width="6" stroke-linecap="round">
+            <path d="M80 560 q20 -90 8 -170"/><path d="M120 560 q18 -90 6 -170"/><path d="M720 560 q-18 -90 -6 -170"/>
+          </g>
+        </svg>
+      </div>
+      <figcaption class="text-xs opacity-80 mt-2">Wetlands — shades on, reeds up.</figcaption>
+    </figure>
+
+    <!-- 3. Grasslands -->
+    <figure class="glass p-2 reveal">
+      <div class="rounded-lg overflow-hidden w-full h-44">
+        <svg viewBox="0 0 800 600" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-label="Capybara in grasslands wearing sunglasses">
+          <defs>
+            <linearGradient id="sky3" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#aee1ff"/><stop offset="1" stop-color="#dff2ff"/>
+            </linearGradient>
+            <linearGradient id="fur3" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#c9996b"/><stop offset="1" stop-color="#8f6642"/>
+            </linearGradient>
+          </defs>
+          <rect width="800" height="600" fill="url(#sky3)"/>
+          <path d="M0 460 C 200 420, 420 500, 800 460 L 800 600 L 0 600 Z" fill="#86cf6e"/>
+          <g transform="translate(220,340)">
+            <ellipse cx="220" cy="100" rx="200" ry="110" fill="url(#fur3)" stroke="#6e4a30" stroke-width="6"/>
+            <ellipse cx="360" cy="98" rx="62" ry="48" fill="url(#fur3)" stroke="#6e4a30" stroke-width="6"/>
+            <!-- SUNGLASSES -->
+            <g transform="translate(324,82)">
+              <rect x="-52" y="-14" width="54" height="26" rx="6" fill="#0b0d13"/>
+              <rect x="6" y="-14" width="54" height="26" rx="6" fill="#0b0d13"/>
+              <rect x="-58" y="-18" width="126" height="10" rx="5" fill="var(--frames)"/>
+              <rect x="-64" y="-6" width="12" height="6" rx="3" fill="var(--frames)"/>
+              <rect x="58" y="-6" width="12" height="6" rx="3" fill="var(--frames)"/>
+            </g>
+            <path d="M370 128 q18 10 26 10" stroke="#3a2416" stroke-width="5" fill="none" stroke-linecap="round"/>
+          </g>
+          <g stroke="#5fbf58" stroke-width="6" stroke-linecap="round">
+            <path d="M60 580 q18 -80 10 -140"/><path d="M120 580 q22 -80 12 -140"/><path d="M720 580 q-22 -80 -12 -140"/>
+          </g>
+        </svg>
+      </div>
+      <figcaption class="text-xs opacity-80 mt-2">Grasslands — strolls, snacks, shades.</figcaption>
+    </figure>
+
+    <!-- 4. Hot Spring -->
+    <figure class="glass p-2 reveal">
+      <div class="rounded-lg overflow-hidden w-full h-44">
+        <svg viewBox="0 0 800 600" class="w-full h-full" xmlns="http://www.w3.org/2000/svg" aria-label="Capybara hot spring wearing sunglasses">
+          <defs>
+            <linearGradient id="sky4" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0" stop-color="#cde9ff"/><stop offset="1" stop-color="#eef7ff"/>
+            </linearGradient>
+            <radialGradient id="steam" cx="50%" cy="30%" r="60%">
+              <stop offset="0" stop-color="#ffffffcc"/><stop offset="1" stop-color="#ffffff00"/>
+            </radialGradient>
+            <linearGradient id="fur4" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#d1a376"/><stop offset="1" stop-color="#996a45"/>
+            </linearGradient>
+          </defs>
+          <rect width="800" height="600" fill="url(#sky4)"/>
+          <ellipse cx="400" cy="460" rx="280" ry="90" fill="#a8e0ff"/>
+          <ellipse cx="400" cy="420" rx="240" ry="70" fill="#89cff8" opacity=".8"/>
+          <ellipse cx="400" cy="360" rx="210" ry="40" fill="url(#steam)" opacity=".6"/>
+          <g transform="translate(240,360)">
+            <ellipse cx="160" cy="40" rx="140" ry="70" fill="url(#fur4)" stroke="#6f4b31" stroke-width="6"/>
+            <ellipse cx="260" cy="36" rx="46" ry="34" fill="url(#fur4)" stroke="#6f4b31" stroke-width="6"/>
+            <!-- SUNGLASSES -->
+            <g transform="translate(238,26)">
+              <rect x="-44" y="-12" width="46" height="22" rx="6" fill="#0b0d13"/>
+              <rect x="6" y="-12" width="46" height="22" rx="6" fill="#0b0d13"/>
+              <rect x="-50" y="-16" width="108" height="10" rx="5" fill="var(--frames)"/>
+              <rect x="-56" y="-4" width="12" height="6" rx="3" fill="var(--frames)"/>
+              <rect x="50" y="-4" width="12" height="6" rx="3" fill="var(--frames)"/>
+            </g>
+            <path d="M258 54 q-10 8 -18 8" stroke="#3a2416" stroke-width="5" fill="none" stroke-linecap="round"/>
+          </g>
+          <g fill="#6f7a86"><ellipse cx="120" cy="510" rx="60" ry="20"/><ellipse cx="680" cy="520" rx="70" ry="22"/></g>
+        </svg>
+      </div>
+      <figcaption class="text-xs opacity-80 mt-2">Hot spring — spa day with shades.</figcaption>
+    </figure>
+  </div>
+  <p class="text-[11px] opacity-60 mt-2">Have real photos? Send the URLs and I’ll wire them in exactly.</p>
+</section>
+
+<!-- ROADMAP -->
+<section id="roadmap" class="row pb-12">
+  <h2 class="text-2xl font-bold mb-4 reveal">Roadmap</h2>
+  <div class="grid md:grid-cols-4 gap-4">
+    <div class="glass p-5 reveal"><div class="text-xs uppercase opacity-70">Q1</div><div class="font-semibold mt-1">Platform Calm</div><p class="text-sm opacity-80 mt-1">Ethical vibes & neat docs.</p></div>
+    <div class="glass p-5 reveal"><div class="text-xs uppercase opacity-70">Q2</div><div class="font-semibold mt-1">Meme Rail Tours</div><p class="text-sm opacity-80 mt-1">Photo prompts & edits.</p></div>
+    <div class="glass p-5 reveal"><div class="text-xs uppercase opacity-70">Q3</div><div class="font-semibold mt-1">Capy Vault</div><p class="text-sm opacity-80 mt-1">Fan art gallery.</p></div>
+    <div class="glass p-5 reveal"><div class="text-xs uppercase opacity-70">Q4</div><div class="font-semibold mt-1">Subway Social</div><p class="text-sm opacity-80 mt-1">Community day (fictional).</p></div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section id="faq" class="row pb-16">
+  <h2 class="text-2xl font-bold mb-4 reveal">FAQ</h2>
+  <div class="grid lg:grid-cols-2 gap-4">
+    <details class="glass p-4 reveal"><summary class="cursor-pointer font-semibold">Is this real?</summary><p class="mt-2 text-sm opacity-85">No — demo site. Add your own contracts/links if you launch anything.</p></details>
+    <details class="glass p-4 reveal"><summary class="cursor-pointer font-semibold">Why red sunglasses?</summary><p class="mt-2 text-sm opacity-85">Because capybara cool is a lifestyle.</p></details>
+    <details class="glass p-4 reveal"><summary class="cursor-pointer font-semibold">Can I join?</summary><p class="mt-2 text-sm opacity-85">Yes — bring memes & kindness.</p></details>
+    <details class="glass p-4 reveal"><summary class="cursor-pointer font-semibold">Where’s the whitepaper?</summary><p class="mt-2 text-sm opacity-85">It’s relaxing poolside with CAPY.</p></details>
+  </div>
+</section>
+
+<!-- FOOTER CTA -->
+<section class="row pb-14">
+  <div class="glass p-6 text-center reveal">
+    <div class="text-lg font-semibold">Ride with CAPY</div>
+    <p class="opacity-80 text-sm mt-1">No token sale. No promises. Just neon & giggles.</p>
+    <div class="mt-3 flex justify-center gap-3">
+      <a href="#" class="btn btn-cta">Community</a>
+      <a href="#" class="btn btn-ghost">Docs</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // scroll progress
+  const bar=document.getElementById('progress');
+  addEventListener('scroll',()=>{const h=document.documentElement; bar.style.width=(h.scrollTop/(h.scrollHeight-h.clientHeight))*100+'%'},{passive:true});
+
+  // reveal on scroll (respect reduced motion)
+  const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if(!reduce && 'IntersectionObserver' in window){
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('visible')}),{threshold:.12});
+    document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  }else{
+    document.querySelectorAll('.reveal').forEach(el=>el.classList.add('visible'));
+  }
+
+  // tokenomics donut (demo)
+  const ctx=document.getElementById('donut');
+  if(ctx && window.Chart){
+    new Chart(ctx,{type:'doughnut',
+      data:{labels:['Community','Platform Fees','Liquidity','Rewards','Art & Outreach'],
+        datasets:[{data:[40,20,20,10,10],
+          backgroundColor:['#00f0ff','#ff26a8','#9dff57','#7c9bff','#ffd166'],
+          borderWidth:0, borderRadius:12}]},
+      options:{cutout:'62%', plugins:{legend:{display:false}}}
+    });
+  }
+</script>
+</body>
